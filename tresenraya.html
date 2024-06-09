@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tres en Raya</title>
+  <meta name="author" content="Julia Cabral">
+  <!--icono-->
+  <link rel="icon" type="images/x-icon" href="logo.PNG" />
+  <!--syle-->
+  <link rel="stylesheet" type="text/css" href="diversion.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    #board {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      grid-template-rows: repeat(3, 100px);
+      gap: 2px;
+    }
+    .cell {
+      border: 1px solid #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2em;
+      cursor: pointer;
+    }
+    .cell:hover {
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+  <div class="options">
+    <nav>
+        <a id="Home" href="index.html"  > Home</a> 
+        <a id="about" href="about.html" > Sobre nosotros </a>
+        <a id="red" href="https://pisoo.adalo.com/piso?target=9zekit1nhm2wy3c0zass3ibnr&params=%7B%7D" > Red social </a>
+        <a id="juegos" href="juegos.html"  > Diversión </a>
+        <a id="Pisonews" href="https://julss-team-2.adalo.com/news-app?_gl=1%2A1n59wt8%2A_ga%2AODk2OTg1MzA3LjE3MTc4ODgwMzQ.%2A_ga_SWT45DV35L%2AMTcxNzkyOTE4MS4zLjEuMTcxNzkzMDAwNy4xMS4wLjA.&target=56gwihm29nlbh59ag5xe4jscf&params=%7B%7D"> Noticias </a> 
+    </nav>
+</div>
+  <h1>Tres en Raya</h1>
+  <div id="board"></div>
+  <script>
+    const board = document.getElementById('board');
+    let currentPlayer = 'X';
+    let cells = ['', '', '', '', '', '', '', '', ''];
+    let gameActive = true;
+
+    function checkWinner() {
+      const winningCombos = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6]
+      ];
+      for (let combo of winningCombos) {
+        if (cells[combo[0]] && cells[combo[0]] === cells[combo[1]] && cells[combo[0]] === cells[combo[2]]) {
+          gameActive = false;
+          return cells[combo[0]];
+        }
+      }
+      if (!cells.includes('')) {
+        gameActive = false;
+        return 'tie';
+      }
+      return null;
+    }
+
+    function handleClick(index) {
+      if (!gameActive || cells[index] !== '') return;
+      cells[index] = currentPlayer;
+      render();
+      const winner = checkWinner();
+      if (winner) {
+        if (winner === 'tie') {
+          alert('¡Empate!');
+        } else {
+          alert(`¡${winner} ha ganado!`);
+        }
+        gameActive = false;
+        return;
+      }
+      currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+      if (currentPlayer === 'O') {
+        // Simulación de jugada del ordenador
+        const emptyCells = cells.reduce((acc, cell, index) => {
+          if (cell === '') acc.push(index);
+          return acc;
+        }, []);
+        const randomIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+        cells[randomIndex] = currentPlayer;
+        render();
+        const computerWinner = checkWinner();
+        if (computerWinner) {
+          if (computerWinner === 'tie') {
+            alert('¡Empate!');
+          } else {
+            alert(`¡${computerWinner} ha ganado!`);
+          }
+          gameActive = false;
+          return;
+        }
+        currentPlayer = 'X';
+      }
+    }
+
+    function render() {
+      board.innerHTML = '';
+      cells.forEach((value, index) => {
+        const cell = document.createElement('div');
+        cell.classList.add('cell');
+        cell.textContent = value;
+        cell.addEventListener('click', () => handleClick(index));
+        board.appendChild(cell);
+      });
+    }
+
+    render();
+  </script>
+</body>
+</html>

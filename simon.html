@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simon</title>
+  <meta name="author" content="Julia Cabral">
+  <!--icono-->
+  <link rel="icon" type="images/x-icon" href="logo.PNG" />
+  <!--syle-->
+  <link rel="stylesheet" type="text/css" href="diversion.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    .simon-button {
+      width: 100px;
+      height: 100px;
+      margin: 20px;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      opacity: 0.5;
+    }
+    .simon-button:hover {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="options">
+    <nav>
+        <a id="Home" href="index.html"  > Home</a> 
+        <a id="about" href="about.html" > Sobre nosotros </a>
+        <a id="red" href="https://pisoo.adalo.com/piso?target=9zekit1nhm2wy3c0zass3ibnr&params=%7B%7D" > Red social </a>
+        <a id="juegos" href="juegos.html"  > Diversión </a> 
+        <a id="Pisonews" href="https://julss-team-2.adalo.com/news-app?_gl=1%2A1n59wt8%2A_ga%2AODk2OTg1MzA3LjE3MTc4ODgwMzQ.%2A_ga_SWT45DV35L%2AMTcxNzkyOTE4MS4zLjEuMTcxNzkzMDAwNy4xMS4wLjA.&target=56gwihm29nlbh59ag5xe4jscf&params=%7B%7D"> Noticias </a>
+    </nav>
+</div>
+  <h1>Simon</h1>
+  <div id="simon-container">
+    <button class="simon-button" id="green" onclick="handleClick('green')" style="background-color: green;"></button>
+    <button class="simon-button" id="red" onclick="handleClick('red')" style="background-color: red;"></button>
+    <button class="simon-button" id="yellow" onclick="handleClick('yellow')" style="background-color: yellow;"></button>
+    <button class="simon-button" id="blue" onclick="handleClick('blue')" style="background-color: blue;"></button>
+  </div>
+  <button onclick="startGame()">Empezar</button>
+
+  <script>
+    const simonSequence = [];
+    let playerSequence = [];
+    let isPlaying = false;
+
+    function startGame() {
+      if (!isPlaying) {
+        simonSequence.length = 0;
+        playerSequence.length = 0;
+        addStepToSequence();
+        playSequence();
+        isPlaying = true;
+      }
+    }
+
+    function addStepToSequence() {
+      const colors = ['green', 'red', 'yellow', 'blue'];
+      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+      simonSequence.push(randomColor);
+    }
+
+    function playSequence() {
+      let i = 0;
+      const interval = setInterval(() => {
+        lightUpButton(simonSequence[i]);
+        i++;
+        if (i >= simonSequence.length) {
+          clearInterval(interval);
+        }
+      }, 1000);
+    }
+
+    function lightUpButton(color) {
+      const button = document.getElementById(color);
+      button.style.opacity = 1;
+      setTimeout(() => {
+        button.style.opacity = 0.5;
+      }, 500);
+    }
+
+    function handleClick(color) {
+      if (isPlaying) {
+        playerSequence.push(color);
+        if (playerSequence[playerSequence.length - 1] !== simonSequence[playerSequence.length - 1]) {
+          endGame();
+          return;
+        }
+        if (playerSequence.length === simonSequence.length) {
+          setTimeout(() => {
+            addStepToSequence();
+            playSequence();
+            playerSequence.length = 0;
+          }, 1000);
+        }
+      }
+    }
+
+    function endGame() {
+      alert('¡Has perdido! Tu puntuación fue: ' + (simonSequence.length - 1));
+      isPlaying = false;
+    }
+  </script>
+</body>
+</html>

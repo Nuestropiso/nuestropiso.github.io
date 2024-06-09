@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ahorcado</title>
+  <meta name="author" content="Julia Cabral">
+  <!--icono-->
+  <link rel="icon" type="images/x-icon" href="logo.PNG" />
+  <!--syle-->
+  <link rel="stylesheet" type="text/css" href="diversion.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    #output {
+      margin-top: 20px;
+      font-size: 1.2em;
+    }
+    #hangman {
+      font-size: 2em;
+      margin-top: 20px;
+    }
+  </style>
+
+</head>
+<body>
+  <div class="options">
+    <nav>
+        <a id="Home" href="index.html"  > Home</a> 
+        <a id="about" href="about.html" > Sobre nosotros </a>
+        <a id="red" href="https://pisoo.adalo.com/piso?target=9zekit1nhm2wy3c0zass3ibnr&params=%7B%7D" > Red social </a>
+        <a id="juegos" href="juegos.html"  > Diversión </a> 
+        <a id="Pisonews" href="https://julss-team-2.adalo.com/news-app?_gl=1%2A1n59wt8%2A_ga%2AODk2OTg1MzA3LjE3MTc4ODgwMzQ.%2A_ga_SWT45DV35L%2AMTcxNzkyOTE4MS4zLjEuMTcxNzkzMDAwNy4xMS4wLjA.&target=56gwihm29nlbh59ag5xe4jscf&params=%7B%7D"> Noticias </a>
+    </nav>
+</div>
+  <h1>Ahorcado</h1>
+  <p>Introduce una letra:</p>
+  <input type="text" id="inputLetter" maxlength="1">
+  <button onclick="comprobarLetra()">Comprobar</button>
+  <div id="output"></div>
+  <div id="hangman"></div>
+
+  <script>
+    const palabras = ['ordenador', 'telefono', 'gato', 'perro', 'casa', 'pelota', 'jirafa', 'flor']; // Lista de palabras
+    let palabraSecreta = palabras[Math.floor(Math.random() * palabras.length)].toLowerCase();
+    let letrasCorrectas = [];
+    let letrasIncorrectas = [];
+    let intentosRestantes = 6; // Número de intentos antes de perder
+    const hangmanParts = [
+      'Cabeza',
+      'Cuerpo',
+      'Brazo izquierdo',
+      'Brazo derecho',
+      'Pierna izquierda',
+      'Pierna derecha'
+    ];
+
+    function comprobarLetra() {
+      const letra = document.getElementById('inputLetter').value.toLowerCase();
+      document.getElementById('inputLetter').value = ''; // Limpiar el campo de entrada
+
+      if (!letra.match(/[a-z]/i)) {
+        document.getElementById('output').innerText = 'Por favor, introduce una letra válida.';
+        return;
+      }
+
+      if (letrasCorrectas.includes(letra) || letrasIncorrectas.includes(letra)) {
+        document.getElementById('output').innerText = 'Ya has probado esta letra.';
+        return;
+      }
+
+      if (palabraSecreta.includes(letra)) {
+        letrasCorrectas.push(letra);
+      } else {
+        letrasIncorrectas.push(letra);
+        intentosRestantes--;
+      }
+
+      actualizarEstado();
+    }
+
+    function actualizarEstado() {
+      let palabraAdivinada = '';
+      for (let letra of palabraSecreta) {
+        if (letrasCorrectas.includes(letra)) {
+          palabraAdivinada += letra + ' ';
+        } else {
+          palabraAdivinada += '_ ';
+        }
+      }
+
+      document.getElementById('output').innerText = palabraAdivinada;
+
+      if (letrasIncorrectas.length > 0) {
+        document.getElementById('output').innerText += '\nLetras incorrectas: ' + letrasIncorrectas.join(', ');
+      }
+
+      document.getElementById('hangman').innerText = `Intentos restantes: ${intentosRestantes}`;
+
+      if (intentosRestantes === 0) {
+        gameOver('¡Perdiste! La palabra era: ' + palabraSecreta.toUpperCase());
+      } else if (!palabraAdivinada.includes('_')) {
+        gameOver('¡Ganaste! Has adivinado la palabra.');
+      }
+    }
+
+    function gameOver(message) {
+      document.getElementById('output').innerText = message;
+      document.getElementById('inputLetter').disabled = true;
+      document.querySelector('button').disabled = true;
+    }
+
+    actualizarEstado(); // Actualizar estado inicial al cargar la página
+  </script>
+</body>
+</html>

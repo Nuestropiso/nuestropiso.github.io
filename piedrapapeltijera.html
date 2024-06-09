@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Piedra, papel o tijera</title>
+  <meta name="author" content="Julia Cabral">
+  <!--icono-->
+  <link rel="icon" type="images/x-icon" href="logo.PNG" />
+  <!--syle-->
+  <link rel="stylesheet" type="text/css" href="diversion.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    #output {
+      font-size: 1.2em;
+      margin-top: 20px;
+      animation: shake 0.5s ease infinite alternate; /* Animación de sacudida */
+    }
+    @keyframes shake {
+      from {
+        transform: translateX(-5px);
+      }
+      to {
+        transform: translateX(5px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="options">
+    <nav>
+        <a id="Home" href="index.html"  > Home</a> 
+        <a id="about" href="about.html" > Sobre nosotros </a>
+        <a id="red" href="https://pisoo.adalo.com/piso?target=9zekit1nhm2wy3c0zass3ibnr&params=%7B%7D" > Red social </a>
+        <a id="juegos" href="juegos.html"  > Diversión </a> 
+        <a id="Pisonews" href="https://julss-team-2.adalo.com/news-app?_gl=1%2A1n59wt8%2A_ga%2AODk2OTg1MzA3LjE3MTc4ODgwMzQ.%2A_ga_SWT45DV35L%2AMTcxNzkyOTE4MS4zLjEuMTcxNzkzMDAwNy4xMS4wLjA.&target=56gwihm29nlbh59ag5xe4jscf&params=%7B%7D"> Noticias </a>
+    </nav>
+</div>
+  <h1>Piedra, papel o tijera</h1>
+  <p>Elige una opción:</p>
+  <button onclick="jugar('piedra')">🪨 Piedra</button>
+  <button onclick="jugar('papel')">📄 Papel</button>
+  <button onclick="jugar('tijera')">✂️ Tijera</button>
+  <div id="output"></div>
+
+  <script>
+    function jugar(opcionUsuario) {
+      const opciones = ['piedra', 'papel', 'tijera'];
+      const opcionComputadora = opciones[Math.floor(Math.random() * opciones.length)];
+      let resultado = '';
+
+      if (opcionUsuario === opcionComputadora) {
+        resultado = '¡Empate!';
+      } else if (
+        (opcionUsuario === 'piedra' && opcionComputadora === 'tijera') ||
+        (opcionUsuario === 'papel' && opcionComputadora === 'piedra') ||
+        (opcionUsuario === 'tijera' && opcionComputadora === 'papel')
+      ) {
+        resultado = '¡Ganaste!';
+      } else {
+        resultado = '¡Perdiste!';
+      }
+
+      document.getElementById('output').innerHTML = `Elegiste ${opcionUsuario} ${getEmoji(opcionUsuario)}. La computadora eligió ${opcionComputadora} ${getEmoji(opcionComputadora)}. ${resultado}`;
+    }
+
+    function getEmoji(opcion) {
+      switch (opcion) {
+        case 'piedra':
+          return '🪨';
+        case 'papel':
+          return '📄';
+        case 'tijera':
+          return '✂️';
+        default:
+          return '';
+      }
+    }
+  </script>
+</body>
+</html>
